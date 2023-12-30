@@ -1,7 +1,10 @@
+export type SearchMode = "ToStart" | "ToEnd" | "PrevSession" | "NextSession" | "PrevLap" | "NextLap" | "PrevFrame" | "NextFrame" | "PrevIncident" | "NextIncident";
+
 interface APIBridge {
-  receive(msgName: string, handler: (any) => void);
+  // returns unsubscriber function
+  receive(msgName: string, handler: (any) => void): () => void;
   replay(carNumber: string, sessionNum: number, sessionTime: number);
-  focusCamera(carNumber: string);
+  focusCamera(carNumber: string, cameraGroup?: number);
   jumpToTime(sessionNum: number, sessionTime: number);
   acknowledgeIncident(incidentId: number);
   dismissIncident(incidentId: number);
@@ -11,6 +14,9 @@ interface APIBridge {
   pauseReplay();
   playReplay();
   liveReplay();
+  replaySearch(mode: SearchMode);
+  replaySpeed(speed: number);
+  sendChatMessages(messages: string[]) : Promise<void>;
 }
 
 interface WindowWithSDK extends Window {
